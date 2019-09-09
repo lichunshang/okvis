@@ -81,7 +81,10 @@ link_directories(${CMAKE_BINARY_DIR}/lib)
 
 # require Eigen
 find_package( Eigen REQUIRED )
-include_directories(${EIGEN_INCLUDE_DIR}) 
+include_directories(${EIGEN_INCLUDE_DIR})
+message("EIGEN_WORLD_VERSION ${EIGEN_WORLD_VERSION}")
+message("EIGEN_MAJOR_VERSION ${EIGEN_MAJOR_VERSION}")
+message("EIGEN_MINOR_VERSION ${EIGEN_MINOR_VERSION}")
 
 # libvisensor
 find_package(VISensor)
@@ -275,6 +278,8 @@ if(${BUILD_TESTS})
 endif()
 
 # BUILD LOCAL DEPENDENCIES
+include_directories(okvis_apps/include)
+
 include_directories(okvis_util/include)
 add_subdirectory(okvis_util)
 
@@ -331,6 +336,7 @@ if(BUILD_APPS)
     pthread 
     ${Boost_LIBRARIES}
   )
+
   if(${VISENSORDRIVER_FOUND})
     target_link_libraries(okvis_app_synchronous ${VISensorDriver_LIBRARY})
   endif()
