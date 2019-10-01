@@ -82,6 +82,7 @@ link_directories(${CMAKE_BINARY_DIR}/lib)
 # require Eigen
 find_package( Eigen REQUIRED )
 include_directories(${EIGEN_INCLUDE_DIR})
+message("EIGEN_INCLUDE_DIR ${EIGEN_INCLUDE_DIR}")
 message("EIGEN_WORLD_VERSION ${EIGEN_WORLD_VERSION}")
 message("EIGEN_MAJOR_VERSION ${EIGEN_MAJOR_VERSION}")
 message("EIGEN_MINOR_VERSION ${EIGEN_MINOR_VERSION}")

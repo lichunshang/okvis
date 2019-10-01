@@ -207,7 +207,8 @@ int app_fn(const std::string &path,
            const boost::optional<okvis::VioInterface::StateCallback> &stateCallback = boost::optional<okvis::VioInterface::StateCallback>(), 
            const boost::optional<okvis::VioInterface::FullStateCallback> &fullStateCallback = boost::optional<okvis::VioInterface::FullStateCallback>(), 
            const boost::optional<okvis::VioInterface::LandmarksCallback> &landmarksCallback = boost::optional<okvis::VioInterface::LandmarksCallback>(), 
-           const boost::optional<std::function<void()>> &cb_each_frame = boost::optional<std::function<void()>>())
+           const boost::optional<std::function<void()>> &cb_each_frame = boost::optional<std::function<void()>>(), 
+           const boost::optional<std::function<bool()>> &continue_criteria = boost::optional<std::function<bool()>>())
 {
 
   okvis::VioParametersReader vio_parameters_reader(configFilename);
@@ -286,7 +287,7 @@ int app_fn(const std::string &path,
 
   int counter = 0;
   okvis::Time start(0.0);
-  while (true) {
+  while (true && continue_criteria.get()()) {
     okvis_estimator.display();
     if (cb_each_frame) {
       cb_each_frame.get()();
@@ -295,8 +296,7 @@ int app_fn(const std::string &path,
     // check if at the end
     for (size_t i = 0; i < numCameras; ++i) {
       if (cam_iterators[i] == image_names[i].end()) {
-        std::cout << std::endl << "Finished. Press any key to exit." << std::endl << std::flush;
-        cv::waitKey();
+        std::cout << std::endl << "Finished." << std::endl << std::flush;
         return 0;
       }
     }
@@ -321,8 +321,7 @@ int app_fn(const std::string &path,
       okvis::Time t_imu = start;
       do {
         if (!std::getline(imu_file, line)) {
-          std::cout << std::endl << "Finished. Press any key to exit." << std::endl << std::flush;
-          cv::waitKey();
+          std::cout << std::endl << "Finished." << std::endl << std::flush;
           return 0;
         }
 
