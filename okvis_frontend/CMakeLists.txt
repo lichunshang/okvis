@@ -7,7 +7,7 @@ if(NOT DO_TIMING)
 endif()    
 
 # require Eigen
-find_package( Eigen REQUIRED )
+find_package(Eigen REQUIRED)
 include_directories(${EIGEN_INCLUDE_DIR}) 
 
 # build the library

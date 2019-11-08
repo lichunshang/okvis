@@ -80,7 +80,7 @@ include_directories(${CMAKE_BINARY_DIR}/include)
 link_directories(${CMAKE_BINARY_DIR}/lib)
 
 # require Eigen
-find_package( Eigen REQUIRED )
+find_package(Eigen REQUIRED)
 include_directories(${EIGEN_INCLUDE_DIR})
 message("EIGEN_INCLUDE_DIR ${EIGEN_INCLUDE_DIR}")
 message("EIGEN_WORLD_VERSION ${EIGEN_WORLD_VERSION}")

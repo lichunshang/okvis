@@ -11,7 +11,7 @@ configure_file(../cmake/okvisConfig.hpp.in "${CMAKE_CURRENT_BINARY_DIR}/okvisCon
 message(STATUS ${CMAKE_CURRENT_BINARY_DIR}/okvisConfig.hpp)
 
 # require Eigen
-find_package( Eigen REQUIRED )
+find_package(Eigen REQUIRED)
 include_directories(${EIGEN_INCLUDE_DIR}) 
 
 # require OpenCV

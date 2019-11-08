@@ -202,7 +202,7 @@ class PoseViewer
 
 // this is just a workbench. most of the stuff here will go into the Frontend class.
 int app_fn(const std::string &path,
-           const std::string &configFilename,
+           okvis::VioParameters &parameters,
            const okvis::Duration &deltaT,
            const boost::optional<okvis::VioInterface::StateCallback> &stateCallback = boost::optional<okvis::VioInterface::StateCallback>(), 
            const boost::optional<okvis::VioInterface::FullStateCallback> &fullStateCallback = boost::optional<okvis::VioInterface::FullStateCallback>(), 
@@ -210,11 +210,6 @@ int app_fn(const std::string &path,
            const boost::optional<std::function<void()>> &cb_each_frame = boost::optional<std::function<void()>>(), 
            const boost::optional<std::function<bool()>> &continue_criteria = boost::optional<std::function<bool()>>())
 {
-
-  okvis::VioParametersReader vio_parameters_reader(configFilename);
-  okvis::VioParameters parameters;
-  vio_parameters_reader.getParameters(parameters);
-
   okvis::ThreadedKFVio okvis_estimator(parameters);
 
   okvis_estimator.setBlocking(true);
@@ -305,9 +300,6 @@ int app_fn(const std::string &path,
     okvis::Time t;
 
     for (size_t i = 0; i < numCameras; ++i) {
-      cv::Mat filtered = cv::imread(
-          path + "/cam" + std::to_string(i) + "/data/" + *cam_iterators.at(i),
-          cv::IMREAD_GRAYSCALE);
       std::string nanoseconds = cam_iterators.at(i)->substr(
           cam_iterators.at(i)->size() - 13, 9);
       std::string seconds = cam_iterators.at(i)->substr(
@@ -315,6 +307,12 @@ int app_fn(const std::string &path,
       t = okvis::Time(std::stoi(seconds), std::stoi(nanoseconds));
       if (start == okvis::Time(0.0)) {
         start = t;
+      }
+      cv::Mat filtered; 
+      if (t - start > deltaT) {
+        filtered = cv::imread(
+            path + "/cam" + std::to_string(i) + "/data/" + *cam_iterators.at(i),
+            cv::IMREAD_GRAYSCALE);
       }
 
       // get all IMU measurements till then
